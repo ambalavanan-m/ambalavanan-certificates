@@ -83,6 +83,9 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet">
 
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         :root {
             --ink: #0D0D0D;
@@ -243,6 +246,78 @@
 
         .nav-link:hover::after {
             width: 100%;
+        }
+
+        /* ─── Mobile Menu Toggle ─── */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            z-index: 600;
+        }
+
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--ink);
+            transition: all 0.35s var(--ease-expo);
+            border-radius: 1px;
+        }
+
+        .mobile-menu-toggle.open span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .mobile-menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(9px, -9px);
+        }
+
+        /* ─── Mobile Menu ─── */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: var(--cream);
+            border-top: 1px solid var(--border);
+            z-index: 499;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-menu-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-item:hover {
+            background: var(--gold-pale);
+            color: var(--ink);
+            padding-left: 2rem;
         }
 
         /* ─── Hero ─── */
@@ -743,6 +818,8 @@
         .modal-actions {
             display: flex;
             gap: 0.85rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .modal-btn {
@@ -815,6 +892,100 @@
             right: 2rem;
         }
 
+        /* ─── QR Code Modal ─── */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(10, 9, 7, 0.96);
+            backdrop-filter: blur(24px);
+        }
+
+        .qr-modal.open {
+            display: flex;
+        }
+
+        .qr-modal-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+        }
+
+        .qr-modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            animation: modalScale 0.55s var(--ease-expo);
+        }
+
+        .qr-modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+        }
+
+        .qr-code-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 4px;
+        }
+
+        .qr-code-container canvas {
+            display: block;
+            border: 2px solid var(--border-gold);
+            border-radius: 4px;
+            padding: 10px;
+            background: white;
+        }
+
+        .qr-modal-desc {
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+            margin-bottom: 1.5rem;
+            max-width: 300px;
+        }
+
+        .qr-modal-actions {
+            display: flex;
+            gap: 0.85rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .qr-modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .qr-modal-close:hover {
+            background: rgba(201, 168, 76, 0.2);
+            border-color: var(--gold);
+            transform: rotate(90deg);
+        }
+
         /* ─── Footer ─── */
         .footer {
             border-top: 1px solid var(--border);
@@ -879,6 +1050,10 @@
                 display: none;
             }
 
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
             .hero {
                 padding: 140px 1.5rem 60px;
             }
@@ -911,6 +1086,21 @@
             .footer {
                 padding: 2rem 1.5rem;
             }
+
+            .qr-modal-content {
+                width: 100%;
+                max-width: 90%;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .modal-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -930,8 +1120,19 @@
                 <a href="#awards" class="nav-link">Awards</a>
                 <a href="https://ambalavanan.vercel.app" class="nav-link">Portfolio</a>
             </nav>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="#awards" class="mobile-menu-item">Awards</a>
+        <a href="https://ambalavanan.vercel.app" class="mobile-menu-item">Portfolio</a>
+    </nav>
 
     <!-- Hero -->
     <section class="hero">
@@ -1079,12 +1280,54 @@
                         </svg>
                         Share
                     </button>
+                    <button class="modal-btn modal-btn-ghost" id="modal-qr-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                            <path d="M14 14h7v3h-3v4h3v3h-7" />
+                        </svg>
+                        QR Code
+                    </button>
                     <a class="modal-btn modal-btn-primary" id="modal-download" href="#" download>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                         </svg>
                         Download
                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="qr-modal" id="qrModal">
+        <button class="qr-modal-close" id="qr-modal-close" aria-label="Close QR modal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+        <div class="qr-modal-inner">
+            <div class="qr-modal-content">
+                <h2 class="qr-modal-title" id="qr-modal-title">Certificate QR Code</h2>
+                <p class="qr-modal-desc">Scan this QR code to view the certificate</p>
+                <div class="qr-code-container" id="qrCodeContainer"></div>
+                <div class="qr-modal-actions">
+                    <button class="modal-btn modal-btn-primary" id="qr-download-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                        </svg>
+                        Download QR
+                    </button>
+                    <button class="modal-btn modal-btn-ghost" id="qr-close-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
@@ -1105,6 +1348,32 @@
             // ─── State ───
             const cards = Array.from(document.querySelectorAll('.certificate-card'));
             let currentIndex = 0;
+            let currentQRIndex = null;
+
+            // ─── Mobile Menu Toggle ───
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenuToggle.classList.toggle('open');
+                mobileMenu.classList.toggle('open');
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('.mobile-menu-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    mobileMenuToggle.classList.remove('open');
+                    mobileMenu.classList.remove('open');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.header-inner') && !e.target.closest('.mobile-menu')) {
+                    mobileMenuToggle.classList.remove('open');
+                    mobileMenu.classList.remove('open');
+                }
+            });
 
             // ─── Header scroll ───
             const header = document.getElementById('header');
@@ -1149,6 +1418,36 @@
                 }
             }
 
+            // ─── QR Code Generator ───
+            let qrInstance = null;
+
+            function generateQRCode(url, title) {
+                const container = document.getElementById('qrCodeContainer');
+                container.innerHTML = ''; // Clear previous QR code
+                
+                qrInstance = new QRCode(container, {
+                    text: url,
+                    width: 250,
+                    height: 250,
+                    colorDark: '#0D0D0D',
+                    colorLight: '#FFFFFF',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                document.getElementById('qr-modal-title').textContent = `${title} - QR Code`;
+            }
+
+            function downloadQRCode() {
+                const canvas = document.querySelector('#qrCodeContainer canvas');
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = 'certificate-qr.png';
+                    link.click();
+                    showToast('QR code downloaded');
+                }
+            }
+
             // ─── Modal ───
             const modal = document.getElementById('modal');
             const modalImg = document.getElementById('modal-img');
@@ -1156,6 +1455,7 @@
             const modalDl = document.getElementById('modal-download');
             const modalShare = document.getElementById('modal-share-btn');
             const modalInner = document.getElementById('modal-inner');
+            const qrModal = document.getElementById('qrModal');
 
             function openModal(index) {
                 const card = cards[index];
@@ -1181,6 +1481,8 @@
                 modalInner.style.animation = 'none';
                 void modalInner.offsetHeight;
                 modalInner.style.animation = '';
+
+                currentQRIndex = index;
             }
 
             function closeModal() {
@@ -1189,6 +1491,22 @@
                 if (window.location.hash) {
                     history.pushState('', document.title, window.location.pathname + window.location.search);
                 }
+            }
+
+            function openQRModal() {
+                if (currentQRIndex !== null) {
+                    const card = cards[currentQRIndex];
+                    const base = window.location.href.split('#')[0];
+                    const qrUrl = `${base}#${card.id}`;
+                    const title = card.dataset.title;
+                    
+                    generateQRCode(qrUrl, title);
+                    qrModal.classList.add('open');
+                }
+            }
+
+            function closeQRModal() {
+                qrModal.classList.remove('open');
             }
 
             // Card clicks
@@ -1206,6 +1524,10 @@
 
             // Modal controls
             document.getElementById('modal-close').addEventListener('click', closeModal);
+            document.getElementById('modal-qr-btn').addEventListener('click', openQRModal);
+            document.getElementById('qr-modal-close').addEventListener('click', closeQRModal);
+            document.getElementById('qr-close-btn').addEventListener('click', closeQRModal);
+            document.getElementById('qr-download-btn').addEventListener('click', downloadQRCode);
 
             document.getElementById('modal-prev').addEventListener('click', () => {
                 openModal((currentIndex - 1 + cards.length) % cards.length);
@@ -1219,11 +1541,18 @@
                 if (e.target === modal) closeModal();
             });
 
+            qrModal.addEventListener('click', (e) => {
+                if (e.target === qrModal) closeQRModal();
+            });
+
             document.addEventListener('keydown', (e) => {
-                if (!modal.classList.contains('open')) return;
-                if (e.key === 'Escape') closeModal();
-                if (e.key === 'ArrowLeft') document.getElementById('modal-prev').click();
-                if (e.key === 'ArrowRight') document.getElementById('modal-next').click();
+                if (modal.classList.contains('open')) {
+                    if (e.key === 'Escape') closeModal();
+                    if (e.key === 'ArrowLeft') document.getElementById('modal-prev').click();
+                    if (e.key === 'ArrowRight') document.getElementById('modal-next').click();
+                } else if (qrModal.classList.contains('open')) {
+                    if (e.key === 'Escape') closeQRModal();
+                }
             });
 
             // ─── Deep-link via hash ───
